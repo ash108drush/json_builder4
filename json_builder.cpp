@@ -16,6 +16,7 @@ Builder& Builder::Value(Node node){
     Node* node_ptr = nodes_stack_.back();
     if(node_ptr->IsArray()){
         node_ptr->AsArray().emplace_back(std::move(node));
+
     }
     if(node_ptr->IsDict()){
         if(is_key_){
@@ -26,6 +27,7 @@ Builder& Builder::Value(Node node){
         }
 
     }
+
     return  *this ;
 }
 
@@ -42,6 +44,7 @@ Builder& Builder::StartArray() {
             auto pair = node_ptr->AsDict().emplace(current_key_,std::move(*node_new));
             Node *nd = &pair.first->second;
             nodes_stack_.push_back(std::move(nd));
+            is_key_ = false;
         }else{
             throw std::logic_error("StartArray not after Key in Dict");
         }
@@ -78,6 +81,7 @@ Builder& Builder::StartDict() {
             auto pair = node_ptr->AsDict().emplace(current_key_,std::move(*node_new));
             Node *nd = &pair.first->second;
             nodes_stack_.push_back(std::move(nd));
+            is_key_ = false;
         }else{
             throw std::logic_error("StartDict not after Key in Dict");
         }
@@ -116,12 +120,26 @@ Builder& Builder::EndDict() {
 
 
 Builder& Builder::Key(std::string string){
+    if(nodes_stack_.size() ==0){
+        throw std::logic_error("Key not in stack size");
+    }
+   if(is_key_){
+        throw std::logic_error("Double key");
+    }
+    Node* node_ptr = nodes_stack_.back();
+    if(!node_ptr->IsDict()){
+        throw std::logic_error("Key not in dict");
+    }
     current_key_ = string;
     is_key_ = true;
     return *this ;
 }
 
 Node Builder::Build(){
+
+    if(first_run_){
+        throw std::logic_error("Build first run");
+    }
     if(nodes_stack_.size() > 0){
         throw std::logic_error("Not All Array or Dict End");
     }
