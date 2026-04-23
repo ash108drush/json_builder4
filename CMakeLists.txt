@@ -5,7 +5,8 @@ project(json_builder4 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-add_executable(json_builder4 main.cpp)
+add_executable(json_builder4 main.cpp
+    json.cpp json.h json_builder.cpp json_builder.h)
 
 include(GNUInstallDirs)
 install(TARGETS json_builder4
