@@ -4,11 +4,11 @@
 
 namespace json {
 
-Builder::ValueContext Builder::Value(Node node){
+Builder& Builder::Value(Node node){
     if(IsRoot()){
         root_ = std::move(node);
         value_can_build_ = true;
-        return BaseContext{ *this };
+        return  *this ;
     }
     if(nodes_stack_.size() == 0){
         throw std::logic_error("Double Value Not in Dict or Array");
@@ -26,14 +26,14 @@ Builder::ValueContext Builder::Value(Node node){
         }
 
     }
-    return BaseContext{ *this };
+    return  *this ;
 }
 
-Builder::ArrayItemContext Builder::StartArray() {
+Builder& Builder::StartArray() {
     if(IsRoot()){
         root_ =  Node(Array());
         nodes_stack_.push_back(std::move(&root_));
-        return BaseContext {*this};
+        return *this;
     }
     Node* node_ptr = nodes_stack_.back();
     if(node_ptr->IsDict()){
@@ -52,17 +52,17 @@ Builder::ArrayItemContext Builder::StartArray() {
             Node& nd = node_ptr->AsArray().emplace_back(std::move(*node_new));
             nodes_stack_.push_back(std::move(&nd));
     }
-    return BaseContext {*this};
+    return *this;
 }
 
 
 
 
-Builder::DictValueContext Builder::StartDict() {
+Builder& Builder::StartDict() {
     if(IsRoot()){
         root_ = Node(Dict());
         nodes_stack_.push_back(std::move(&root_));
-       return BaseContext{ *this };
+       return  *this ;
     }
 
     Node* node_ptr = nodes_stack_.back();
@@ -83,32 +83,31 @@ Builder::DictValueContext Builder::StartDict() {
         }
     }
 
-    return BaseContext{ *this };
+    return  *this ;
 }
 
-
-Builder::BaseContext Builder::BaseContext::EndArray() {
-    if(builder_.nodes_stack_.size() ==0){
+Builder& Builder::EndArray() {
+    if(nodes_stack_.size() ==0){
         throw std::logic_error("End Array Zero Stack Size");
     }
 
-    Node* node_ptr = builder_.nodes_stack_.back();
+    Node* node_ptr = nodes_stack_.back();
     if(node_ptr->IsArray()){
-        builder_.nodes_stack_.pop_back();
+        nodes_stack_.pop_back();
     }else{
          throw std::logic_error("Array expected");
     }
     return *this;
 }
 
-Builder::BaseContext Builder::BaseContext::EndDict() {
-    if(builder_.nodes_stack_.size() ==0){
+Builder& Builder::EndDict() {
+    if(nodes_stack_.size() ==0){
         throw std::logic_error("End Dict Zero Stack Size");
     }
 
-    Node* node_ptr = builder_.nodes_stack_.back();
+    Node* node_ptr = nodes_stack_.back();
     if(node_ptr->IsDict()){
-            builder_.nodes_stack_.pop_back();
+            nodes_stack_.pop_back();
     }else{
         throw std::logic_error("Dict expected");
     }
@@ -116,19 +115,19 @@ Builder::BaseContext Builder::BaseContext::EndDict() {
 }
 
 
-Builder::KeyContext Builder::BaseContext::Key(std::string string){
-    builder_.current_key_ = string;
-    builder_.is_key_ = true;
-    return BaseContext{ *this };
+Builder& Builder::Key(std::string string){
+    current_key_ = string;
+    is_key_ = true;
+    return *this ;
 }
 
-Node Builder::BaseContext::Build(){
-    if(builder_.nodes_stack_.size() > 0){
+Node Builder::Build(){
+    if(nodes_stack_.size() > 0){
         throw std::logic_error("Not All Array or Dict End");
     }
 
 
-    return builder_.root_;
+    return root_;
 }
 
 
