@@ -15,6 +15,10 @@ public:
     Builder& StartDict();
     Builder& StartArray();
     Builder&Value(Node node);
+    Builder& Value(){
+        throw std::logic_error("Empty value");
+    };
+
 
     Builder& Key(std::string);
 

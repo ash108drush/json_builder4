@@ -6,8 +6,31 @@
 
 using namespace std;
 
-int main() {
+void PracFirstTest() {
+    json::Print(
+        json::Document{
+            json::Builder{}
+                .StartDict()
+                .Key("key1"s).Value(123)
+                .Key("key2"s).Value("value2"s)
+                .Key("key3"s).StartArray()
+                .Value(456)
+                .StartDict().EndDict()
+                .StartDict()
+                .Key(""s)
+                .Value(nullptr)
+                .EndDict()
+                .Value(""s)
+                .EndArray()
+                .EndDict()
+                .Build()
+        },
+        cout
+        );
+    cout << endl;
+}
 
+void PracSecondTest() {
     json::Print(
         json::Document{
             json::Builder{}
@@ -16,202 +39,315 @@ int main() {
         },
         cout
         );
+    cout << endl;
+}
+
+void TestOneLVLArray() {
+    json::Print(
+        json::Document{
+            json::Builder{}.
+            StartArray().
+            Value("opened array").
+            Value("second element of first").
+            EndArray().Build()
+        },
+        cout
+        );
+    cout << endl;
+}
+
+void TestSecondLVLArray() {
+    json::Print(
+        json::Document{
+            json::Builder{}.
+            StartArray().
+            Value("opened array").
+            Value("second element of first").
+            StartArray().Value("opened second array").
+            EndArray().EndArray().Build()
+        },
+        cout
+        );
+    cout << endl;
+}
+
+void TestDictOneElement() {
+    json::Print(
+        json::Document{
+            json::Builder{}.
+            StartDict().
+            Key("first elem").
+            Value("first value").
+            EndDict().Build()
+        },
+        cout
+        );
+    cout << endl;
+}
+
+void TestDict() {
+    json::Print(
+        json::Document{
+            json::Builder{}.
+            StartDict().
+            Key("first elem").
+            Value("first value").
+            Key("second key").
+            Value("second value").
+            EndDict().Build()
+        },
+        cout
+        );
+    cout << endl;
+}
+
+void TestDictInDict() {
+    json::Print(
+        json::Document{
+            json::Builder{}.
+            StartDict().
+            Key("first elem").
+            Value("first value").
+            Key("second key").
+            StartDict().
+            Key("second level").
+            Value("second level first value").
+            EndDict().
+            EndDict().Build()
+        },
+        cout
+        );
+    cout << endl;
+}
+
+void TestArrayWithDict() {
+    json::Print(
+        json::Document{
+            json::Builder{}.
+            StartArray().
+            Value("opened array").
+            Value("second element of first").
+            StartDict().
+            Key("first elem").
+            Value("first value").EndDict().
+            EndArray().Build()
+        },
+        cout
+        );
+    cout << endl;
+}
+
+void TestDictWithArray() {
+    json::Print(
+        json::Document{
+            json::Builder{}.
+            StartDict().
+            Key("first elem").
+            Value("first value").
+            Key("key, then array").
+            StartArray().
+            Value("first value of array").
+            Value("second value of array").
+            EndArray().
+            Key("onother dict key").Value("another value").
+            EndDict().Build()
+        },
+        cout
+        );
+    cout << endl;
+}
+
+void TestOnlyBuild() {
+    json::Print(
+        json::Document{
+            json::Builder{}
+                .Build()
+
+        },
+        cout
+        );
+    cout << endl;
+}
+
+void TestOnlyValue() {
+    json::Print(
+        json::Document{
+            json::Builder{}.Value("value")
+            .Build()
+        },
+        cout
+        );
+    cout << endl;
+}
+
+void TesttwoValue() {
+    json::Print(
+        json::Document{
+            json::Builder{}.Value("value").
+            Value("value2")
+                .Build()
+        },
+        cout
+        );
+    cout << endl;
+}
+
+void TestEmptyArray() {
+    json::Print(
+        json::Document{
+            json::Builder{}.StartArray().
+            EndArray()
+                .Build()
+        },
+        cout
+        );
+
+    cout << endl;
+}
+
+void TestValueEndArray() {
+    json::Print(
+        json::Document{
+            json::Builder{}.
+            Value("value").
+            EndArray().
+            Build()
+        },
+        cout
+        );
+    cout << endl;
+}
+
+void TestEmptyArrayThenValue() {
+    json::Print(
+        json::Document{
+            json::Builder{}.
+            StartArray().
+            Value(" ").
+            EndArray().
+            StartDict().
+            Key("key").Value("Value").
+            EndDict().
+          //  Value("value").
+            Build()
+        },
+        cout
+        );
+    cout << endl;
+}
+
+void TestUncompleteArray() {
+    json::Print(
+        json::Document{
+            json::Builder{}.
+            StartArray().
+            Value(16).
+            Value(42).
+            Build()
+        },
+        cout
+        );
+    cout << endl;
+}
+
+void TestUncompleteDict() {
+    json::Print(
+        json::Document{
+            json::Builder{}.
+            //StartDict().
+            //Key("key").
+            Value("val").
+            EndDict().
+            Build()
+        },
+        cout
+        );
+    cout << endl;
+}
+
+void TestUncompleteDictInArray() {
+    json::Print(
+        json::Document{
+            json::Builder{}.
+            StartArray().
+            Value("val").
+            StartDict().
+            Key("key").
+            //Value("val").
+
+            EndDict().
+            EndArray().
+            Build()
+        },
+        cout
+        );
+    cout << endl;
+}
+
+void TestUncompleteArrayInDict() {
+    json::Print(
+        json::Document{
+            json::Builder{}.
+            StartDict().
+            Key("key").
+            Value("val").
+            Key("array").
+            StartArray().
+            StartDict().
+            Key("key").
+            Value("value").
+            EndDict().
+            EndDict().
+            Build()
+        },
+        cout
+        );
+    cout << endl;
+}
+
+void LastTest() {
 
     json::Print(
         json::Document{
             json::Builder{}
-                .StartArray()
-                .Value(123)
-                .Value("value2"s)
-                .EndArray()
+                .Key("err")
+                .Value()
                 .Build()
         },
         cout
         );
     cout << endl;
 
-    json::Print(
-        json::Document{
-            json::Builder{}
-                .StartDict()
-                .Key("key1"s).Value(123)
-                .Key("key2"s).Value("value2"s)
-                .EndDict()
-                .Build()
-        },
-        cout
-        );
-    cout << endl;
-
-    std::cout << "MAIN EXAMPLE" << std::endl;
-    json::Print(
-        json::Document{
-            json::Builder{}
-                .StartDict()
-                .Key("key1"s).Value(123)
-                .Key("key2"s).Value("value2"s)
-                .Key("key3"s).StartArray()
-                .Value(456)
-                .Value(457)
-                .Value(458)
-                .StartDict().EndDict()
-                .StartDict()
-                .Key(""s)
-                .Value(nullptr)
-                .EndDict()
-                .EndArray()
-                .EndDict()
-                .Build()
-        },
-        cout
-        );
-    cout << endl;
-
-    json::Print(
-        json::Document{
-            json::Builder{}
-                .StartDict()
-                .Key("key1"s).Value(123)
-                .Key("key2"s).Value("value2"s)
-                .Key("key3"s).StartArray()
-                .Value(456)
-                .StartDict().EndDict()
-                .StartDict()
-                .Key(""s)
-                .Value(nullptr)
-                .EndDict()
-                .Value(""s)
-                .EndArray()
-                .EndDict()
-                .Build()
-        },
-        cout
-        );
-    cout << endl;
 
 
-    cout << endl;
-    json::Print(
-        json::Document{
-            json::Builder{}
-                .StartDict()
-                .Key("key1"s).Value(123)
-                .Key("key2"s).Value("value2"s)
-                .EndDict()
-                .Build()
-        },
-        cout
-        );
-    cout << endl;
+}
+int main() {
 
-    json::Print(
-        json::Document{
-            json::Builder{}
-                .StartArray()
-                .Value(123)
-                .Value("value2"s)
-                .EndArray()
-                .Build()
-        },
-        cout
-        );
-    cout << endl;
+    PracFirstTest();
+    PracSecondTest();
 
+    TestOneLVLArray();
+    TestSecondLVLArray();
+    TestDictOneElement();
+    TestDict();
+    TestDictInDict();
+    TestArrayWithDict();
+    TestDictWithArray();
 
-    json::Print(
-        json::Document{
-            json::Builder{}
-                .StartDict()
-                .Key("key1"s).Value(123)
-                .Key("key2"s).Value("value2"s)
-                .Key("key3"s).StartArray()
-                .Value(456)
-                .StartDict().EndDict()
-                .StartDict()
-                .Key(""s)
-                .Value(nullptr)
-                .EndDict()
-                .Value(""s)
-                .EndArray()
-                .EndDict()
-                .Build()
-        },
-        cout
-        );
-    cout << endl;
+    //
+    TestOnlyValue();
+    TestEmptyArray();
 
-/*
+    //тесты, которые должны бросать исключения (только json_builder)
+ //  TestEmptyArrayThenValue();
+   // TestValueEndArray();
+   // TestOnlyBuild();
+   // TesttwoValue();
 
-    json::Print(
-        json::Document{
-            json::Builder{}.StartArray().StartArray().EndArray().Value(1).EndArray().Build()
-        },
-        cout
-        );
-    cout << endl;
+   // TestUncompleteArray();
+   // TestUncompleteDict();
+   // TestUncompleteDictInArray();
+  //  TestUncompleteArrayInDict();
+   LastTest();
 
-
-    json::Print(
-        json::Document{
-            json::Builder{}.StartDict().Key("1").StartDict().EndDict().Key("2").Value(2).EndDict().Build()
-        },
-        cout
-        );
-    cout << endl;
-*/
-
-/*
-    json::Print(
-        json::Document{
-            json::Builder{}.StartDict().Key("1").StartArray().EndArray().Key("2").Value(2).EndDict().Build()
-        },
-        cout
-        );
-    cout << endl;
-*/
-/*
-
-    json::Print(
-        json::Document{
-            //json::Builder{}.StartDict().Key("1"s).Value("2"s).StartDict().Key("1"s).Value("2"s).EndDict().EndDict().Build()
-            json::Builder{}.StartArray().StartArray().EndArray().Value(1).EndArray().Build()
-        },
-        cout
-        );
-    cout << endl;
-
-*/
-
-    json::Print(
-        json::Document{
-            json::Builder{}
-                .StartDict()
-                .Key("key1"s).Value(123)
-                .EndDict()
-                .EndArray() // <-- тут должна быть ошибка
-
-                .Build()
-        },
-        cout
-        );
-    cout << endl;
-
- /*
-  errors
-json::Builder{}.StartArray().StartDict().Key("1"s).Value(12).EndDict().EndDict().Build()
-json::Builder{}.Value("s"s).Value("1"s).Build()
-*/
-
-
-
-/*
-success
-json::Builder{}.StartArray().StartDict().EndDict().Value(1).EndArray().Build()
-json::Builder{}.StartArray().StartArray().EndArray().Value(1).EndArray().Build()
-json::Builder{}.StartDict().Key("1").StartDict().EndDict().Key("2").Value(2).EndDict().Build()
-json::Builder{}.StartDict().Key("1").StartArray().EndArray().Key("2").Value(2).EndDict().Build()
-
-
-
-*/
 }
